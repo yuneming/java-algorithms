@@ -30,6 +30,7 @@ public class BubbleSort {
                 ) {
             System.out.println(i);
         }
+        System.out.println("test");
     }
 
 }
