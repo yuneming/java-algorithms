@@ -2,42 +2,46 @@ package basicalgorithm;
 
 import java.util.Arrays;
 
-public class InsertionSort {
-    public static void insertSort(int[] array){
-        for(int i = 1;i<array.length;i++){
-            for(int j=i;j>0;j--){
-                if(array[j]<array[j-1]){
-                    int temp = array[j];
-                    array[j] = array[j-1];
-                    array[j-1] = temp;
-                }
-            }
-        }
-    }
-
-    // 通过赋值去交换数据
-    public static void insertSortImproved(int[] array){
-        for(int i = 1;i<array.length;i++){
-            int tempValue = array[i];
-            int j;   //j保存元素e应该插入的位置
-            // 提前终止
-            for(j=i;j>0 && tempValue<array[j-1];j--){
-
-                   array[j] = array[j-1];
-
-            }
-            array[j] = tempValue;
-        }
-    }
+public class QuickSortGeneral {
     public static void quickSort(int[] arr) {
         if (arr == null || arr.length < 2) {
             return;
         }
-        insertSortImproved(arr);
+        quickSort(arr, 0, arr.length - 1);
     }
 
+    /**
+     * @param arr
+     * @param l
+     * @param r
+     * 标准的快速排序，选取第一个或者最后一个作为pivot
+     */
 
+    public static void quickSort(int[] arr, int l, int r) {
+        if(l < r){
+            int pivot = partition(arr,l,r);
+            quickSort(arr,l,pivot-1);
+            quickSort(arr,pivot+1,r);
 
+        }
+    }
+
+    public static int partition(int[] arr, int l, int r) {
+        int pivot = arr[l];
+        while (l < r){
+            while (l < r && arr[r]>=pivot){
+                --r;
+            }
+            arr[l] = arr[r];
+            while (l < r && arr[l]<=pivot){
+                ++l;
+            }
+            arr[r] = arr[l];
+        }
+        arr[l] = pivot;
+        return l;
+
+    }
 
 
     public static void swap(int[] arr, int i, int j) {

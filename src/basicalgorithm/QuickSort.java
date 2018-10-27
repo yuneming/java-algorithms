@@ -2,6 +2,13 @@ package basicalgorithm;
 
 import java.util.Arrays;
 
+/**
+ * 快速排序，递归树最佳是一个平衡树，大量重复元素个数据有序会退化成n^2级别
+ * pivot选择第一个或者最后一个
+ * pivot随机化选择一个
+ * 二路快速排序，解决大量重复值
+ * 三路快速排序，等于pivot的元素较多
+ */
 public class QuickSort {
     public static void quickSort(int[] arr) {
         if (arr == null || arr.length < 2) {
@@ -9,9 +16,12 @@ public class QuickSort {
         }
         quickSort(arr, 0, arr.length - 1);
     }
-
+    // 随机快速排序
     public static void quickSort(int[] arr, int l, int r) {
         if (l < r) {
+            // 随机选一个数，防止选择的比较值是最差情况，比如1，2，3，4，5，6，选择6为pivot情况很差
+            // 不是非得选取最左边或者最右边元素
+            // 每一次 partition 都要使左右俩边的元素尽可能均衡，
             swap(arr, l + (int) (Math.random() * (r - l + 1)), r);
             int[] p = partition(arr, l, r);
             quickSort(arr, l, p[0] - 1);
@@ -20,6 +30,8 @@ public class QuickSort {
     }
 
     public static int[] partition(int[] arr, int l, int r) {
+        // 小于等于区右边界,定义一个小于pivot的区域，实现O(n)级别的算法
+        // 小于区边界的标记
         int less = l - 1;
         int more = r;
         while (l < more) {
@@ -33,6 +45,28 @@ public class QuickSort {
         }
         swap(arr, more, r);
         return new int[] { less + 1, more };
+    }
+    // 二路快速排序，从左右俩边来遍历，存在大量重复元素
+    public static int[] partition2(int[] arr,int l, int r){
+        int temp = arr[l];
+        int i = l+1,j=r;
+        while (true){
+            while (i<=r && arr[i]<temp){
+                i++;
+            }
+            while (j>=l+1 && arr[j]>temp){
+                j--;
+            }
+            if (i > j){
+                break;
+            }
+            swap(arr,i,j);
+            i++;
+            j--;
+        }
+        swap(arr,l,j);
+        return new int[] { i+1, j };
+
     }
 
     public static void swap(int[] arr, int i, int j) {

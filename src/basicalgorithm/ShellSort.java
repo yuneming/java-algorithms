@@ -1,39 +1,35 @@
 package basicalgorithm;
 
 import java.util.Arrays;
+import java.util.Collections;
 
-public class InsertionSort {
-    public static void insertSort(int[] array){
-        for(int i = 1;i<array.length;i++){
-            for(int j=i;j>0;j--){
-                if(array[j]<array[j-1]){
-                    int temp = array[j];
-                    array[j] = array[j-1];
-                    array[j-1] = temp;
+public class ShellSort {
+    // 建立在插入排序的基础上
+    public static void shellSort(int[] array){
+        // 步长
+        int stepLength = array.length/2;
+        int i,j,tempValue;
+        while (stepLength>=1){
+            for(i = stepLength;i<array.length;i++){
+                tempValue = array[i];
+                j = i-stepLength;
+                while (j>=0 && tempValue < array[j]){
+                    array[j+stepLength] = array[j];
+                    j = j-stepLength;
                 }
+                array[j+stepLength] = tempValue;
             }
+            stepLength = stepLength/2;
         }
+
     }
 
-    // 通过赋值去交换数据
-    public static void insertSortImproved(int[] array){
-        for(int i = 1;i<array.length;i++){
-            int tempValue = array[i];
-            int j;   //j保存元素e应该插入的位置
-            // 提前终止
-            for(j=i;j>0 && tempValue<array[j-1];j--){
 
-                   array[j] = array[j-1];
-
-            }
-            array[j] = tempValue;
-        }
-    }
     public static void quickSort(int[] arr) {
         if (arr == null || arr.length < 2) {
             return;
         }
-        insertSortImproved(arr);
+        shellSort(arr);
     }
 
 
@@ -102,8 +98,10 @@ public class InsertionSort {
         System.out.println();
     }
 
+
     // for test
     public static void main(String[] args) {
+
         int testTime = 500000;
         int maxSize = 100;
         int maxValue = 100;

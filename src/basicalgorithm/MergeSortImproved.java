@@ -2,38 +2,87 @@ package basicalgorithm;
 
 import java.util.Arrays;
 
-public class InsertionSort {
-    public static void insertSort(int[] array){
-        for(int i = 1;i<array.length;i++){
-            for(int j=i;j>0;j--){
-                if(array[j]<array[j-1]){
-                    int temp = array[j];
-                    array[j] = array[j-1];
-                    array[j-1] = temp;
-                }
-            }
+/**
+ * 自底向上的归并排序
+ */
+
+public class MergeSortImproved {
+    public static void mergeSort(int[] array,int low,int high){
+        //使用非递归的方式来实现归并排序
+        int len = array.length;
+        int k = 1;
+
+        while(k < len)
+        {
+            mergePass(array, k, len);
+            k *= 2;
+        }
+
+
+    }
+    public static void mergePass(int[] arr,int k, int n){
+        int i = 0;
+        int j;
+
+        //从前往后,将2个长度为k的子序列合并为1个
+        while(i < n - 2*k + 1)
+        {
+            merge(arr, i, i + k-1, i + 2*k - 1);
+            i += 2*k;
+        }
+
+        //这段代码保证了，将那些“落单的”长度不足两两merge的部分和前面merge起来。
+        if(i < n - k )
+        {
+            merge(arr, i, i+k-1, n-1);
         }
     }
+    public static void merge(int[] arr, int low, int mid, int high){
+        //temp数组用于暂存合并的结果
+        int[] temp = new int[high - low + 1];
+        //左半边的指针
+        int i = low;
+        //右半边的指针
+        int j = mid+1;
+        //合并后数组的指针
+        int k = 0;
 
-    // 通过赋值去交换数据
-    public static void insertSortImproved(int[] array){
-        for(int i = 1;i<array.length;i++){
-            int tempValue = array[i];
-            int j;   //j保存元素e应该插入的位置
-            // 提前终止
-            for(j=i;j>0 && tempValue<array[j-1];j--){
-
-                   array[j] = array[j-1];
-
+        //将记录由小到大地放进temp数组
+        for(; i <= mid && j <= high; k++)
+        {
+            if(arr[i] < arr[j]){
+                temp[k] = arr[i++];
             }
-            array[j] = tempValue;
+
+            else{
+                temp[k] = arr[j++];
+            }
+
         }
+
+        //接下来两个while循环是为了将剩余的（比另一边多出来的个数）放到temp数组中
+        while(i <= mid){
+            temp[k++] = arr[i++];
+        }
+
+
+        while(j <= high){
+            temp[k++] = arr[j++];
+        }
+
+
+        //将temp数组中的元素写入到待排数组中
+        for(int l = 0; l < temp.length; l++){
+            arr[low + l] = temp[l];
+        }
+
     }
+
     public static void quickSort(int[] arr) {
         if (arr == null || arr.length < 2) {
             return;
         }
-        insertSortImproved(arr);
+        mergeSort(arr,0,arr.length-1);
     }
 
 

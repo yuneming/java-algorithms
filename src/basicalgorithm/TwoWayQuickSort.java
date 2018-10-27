@@ -2,42 +2,79 @@ package basicalgorithm;
 
 import java.util.Arrays;
 
-public class InsertionSort {
-    public static void insertSort(int[] array){
-        for(int i = 1;i<array.length;i++){
-            for(int j=i;j>0;j--){
-                if(array[j]<array[j-1]){
-                    int temp = array[j];
-                    array[j] = array[j-1];
-                    array[j-1] = temp;
-                }
-            }
-        }
-    }
-
-    // 通过赋值去交换数据
-    public static void insertSortImproved(int[] array){
-        for(int i = 1;i<array.length;i++){
-            int tempValue = array[i];
-            int j;   //j保存元素e应该插入的位置
-            // 提前终止
-            for(j=i;j>0 && tempValue<array[j-1];j--){
-
-                   array[j] = array[j-1];
-
-            }
-            array[j] = tempValue;
-        }
-    }
+public class TwoWayQuickSort {
     public static void quickSort(int[] arr) {
         if (arr == null || arr.length < 2) {
             return;
         }
-        insertSortImproved(arr);
+        quickSort(arr, 0, arr.length - 1);
     }
 
+    /**
+     * @param arr
+     * @param l
+     * @param r
+     * 二路快速排序，会造成左右子树不平衡
+     */
 
+    public static void quickSort(int[] arr, int l, int r) {
+        if(l < r){
+            int pivot = partition2(arr,l,r);
+            quickSort(arr,l,pivot-1);
+            quickSort(arr,pivot+1,r);
 
+        }
+    }
+
+    public static int partition(int[] arr, int l, int r) {
+        if (l >= r) {
+            return 0;
+        }
+        //  左右游标的基础上，再增加了一个游标i，用于处理和基准元素相同的元素，也就是将数组分为三部分：小于当前切分元素的部分，等于当前切分元素的部分，大于当前切分元素的部分
+        int i = l+1,j = r;
+        int pivot = arr[l];
+        while (true){
+            while (i <= r && arr[i]<pivot){
+                i++;
+            }
+            while (j>=l && arr[j]>pivot){
+                j--;
+            }
+            if (i>j){
+                break;
+            }
+            swap(arr,i,j);
+            i++;
+            j--;
+        }
+        swap(arr,l,j);
+        return j;
+
+    }
+    public static int partition2(int[] arr, int l, int r) {
+        if (l >= r) {
+            return 0;
+        }
+
+        // 等译pivot会在俩边，不会集中在一边造成分割不平衡
+        int i = l+1,j = r;
+        int pivot = arr[l];
+        while (i < j){
+            while (i <= r && arr[i]<pivot){
+                i++;
+            }
+            while (j>=l && arr[j]>pivot){
+                j--;
+            }
+
+            swap(arr,i,j);
+            i++;
+            j--;
+        }
+        swap(arr,l,j);
+        return j;
+
+    }
 
 
     public static void swap(int[] arr, int i, int j) {

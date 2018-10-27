@@ -2,38 +2,61 @@ package basicalgorithm;
 
 import java.util.Arrays;
 
-public class InsertionSort {
-    public static void insertSort(int[] array){
-        for(int i = 1;i<array.length;i++){
-            for(int j=i;j>0;j--){
-                if(array[j]<array[j-1]){
-                    int temp = array[j];
-                    array[j] = array[j-1];
-                    array[j-1] = temp;
-                }
+/**
+ * 自底向上的归并排序，不需要进行递归
+ */
+public class MergeSortBU {
+    // 递归使用归并排序，对arr[l,...,r]的范围进行排序
+    public static void mergeSortBU(int[] array,int n){
+        for (int sz = 1;sz <= n; sz += sz){
+            for (int i = 0; i + sz < n; i += sz + sz){
+                // 对arr[i...i+sz-1]和arr[i+sz...i+2*sz-1]进行排序
+                // 考虑越界情况
+                merge(array,i,i+sz-1, Math.min(i+sz+sz-1,n-1));
             }
         }
+
+
     }
-
-    // 通过赋值去交换数据
-    public static void insertSortImproved(int[] array){
-        for(int i = 1;i<array.length;i++){
-            int tempValue = array[i];
-            int j;   //j保存元素e应该插入的位置
-            // 提前终止
-            for(j=i;j>0 && tempValue<array[j-1];j--){
-
-                   array[j] = array[j-1];
-
-            }
-            array[j] = tempValue;
+    public static void merge(int[] arr, int low, int mid, int high){
+        int[] aux = new int[high-low+1];
+        // 辅助空间赋值
+        for (int i = low; i <= high; i++){
+            aux[i-low] = arr[i];
         }
+        int i = low, j = mid+1;
+        for (int k = low; k <= high; k++){
+            // 左边的已经遍历完
+            if (i > mid){
+                arr[k] = aux[j-low];
+                j++;
+            }
+            // 如果右半部分元素已经全部处理完毕
+            else if( j > high){
+                arr[k] = aux[i-low];
+                i++;
+            }
+            // 左半部分所指元素 < 右半部分所指元素
+            else if (aux[i-low] < aux[j-low]){
+                arr[k] = aux[i-low];
+                i++;
+            }
+            // 左半部分所指元素 >= 右半部分所指元素
+            else {
+                arr[k] = aux[j-low];
+                j++;
+            }
+        }
+
+
+
     }
+
     public static void quickSort(int[] arr) {
         if (arr == null || arr.length < 2) {
             return;
         }
-        insertSortImproved(arr);
+        mergeSortBU(arr,arr.length);
     }
 
 

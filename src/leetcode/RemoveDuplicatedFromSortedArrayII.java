@@ -10,6 +10,7 @@ public class RemoveDuplicatedFromSortedArrayII {
         }
         System.out.println();
     }
+
     public static int removeDuplicates(int[] nums){
         int pointer = 0;
         // 统计重复项

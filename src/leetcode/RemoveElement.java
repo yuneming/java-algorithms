@@ -17,9 +17,11 @@ public class RemoveElement {
         printArray(nums);
         System.out.println(pointer);
         return pointer;
+
     }
     public static void printArray(int[] arr) {
         if (arr == null) {
+
             return;
         }
         for (int i = 0; i < arr.length; i++) {

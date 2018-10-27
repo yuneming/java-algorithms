@@ -2,42 +2,76 @@ package basicalgorithm;
 
 import java.util.Arrays;
 
-public class InsertionSort {
-    public static void insertSort(int[] array){
-        for(int i = 1;i<array.length;i++){
-            for(int j=i;j>0;j--){
-                if(array[j]<array[j-1]){
-                    int temp = array[j];
-                    array[j] = array[j-1];
-                    array[j-1] = temp;
-                }
-            }
-        }
-    }
-
-    // 通过赋值去交换数据
-    public static void insertSortImproved(int[] array){
-        for(int i = 1;i<array.length;i++){
-            int tempValue = array[i];
-            int j;   //j保存元素e应该插入的位置
-            // 提前终止
-            for(j=i;j>0 && tempValue<array[j-1];j--){
-
-                   array[j] = array[j-1];
-
-            }
-            array[j] = tempValue;
-        }
-    }
+public class ThreeWayQuickSort {
     public static void quickSort(int[] arr) {
         if (arr == null || arr.length < 2) {
             return;
         }
-        insertSortImproved(arr);
+        quickSort(arr, 0, arr.length - 1);
     }
 
+    /**
+     * @param arr
+     * @param l
+     * @param r
+     * 二路快速排序，避免大量重复元素
+     */
 
+    public static void quickSort(int[] arr, int l, int r) {
+        if(l < r){
+//            int pivot[] = partition(arr,l,r);
+//            quickSort(arr,l,pivot[0]-1);
+//            quickSort(arr,pivot[1]+1,r);
+            int[] pivot = partition2(arr,l,r);
+            quickSort(arr,l,pivot[0]);
+            quickSort(arr,pivot[1],r);
 
+        }
+    }
+
+    public static int[] partition(int[] arr, int l, int r) {
+        if (l >= r) {
+            return new int[]{0,0};
+        }
+        //  左右游标的基础上，再增加了一个游标i，用于处理和基准元素相同的元素，也就是将数组分为三部分：小于当前切分元素的部分，等于当前切分元素的部分，大于当前切分元素的部分
+        int lt = l, gt = r, i = l + 1;
+        int pivot = arr[l];
+        while (i <= gt) {
+            if (arr[i] > pivot) {
+                swap(arr, i, gt--);
+            } else if (arr[i] < pivot) {
+                swap(arr, i++, lt++);
+            } else {
+                i++;
+            }
+        }
+        return new int[]{lt, gt};
+
+    }
+    // 另一种partition的操作方式
+    public static int[] partition2(int[] arr, int l, int r){
+        int v=arr[l];
+        int lt=l; //arr[left+1 …… lt]<v
+        int gt=r+1;     //arr[gt …… right] >v
+        int i=l+1; //arr[lt+1 …… i) ==v
+        while (i < gt){
+            if(arr[i] < v){
+                swap(arr, i, lt+1);
+                i++;
+                lt++;
+            }
+            else if(arr[i]>v){
+                swap(arr, i, gt-1);
+
+                gt--;
+            }
+            else {
+                i++;
+            }
+        }
+        swap(arr, l, lt);
+        return new int[]{lt-1,gt};
+    }
 
 
     public static void swap(int[] arr, int i, int j) {

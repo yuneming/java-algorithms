@@ -2,38 +2,25 @@ package basicalgorithm;
 
 import java.util.Arrays;
 
-public class InsertionSort {
-    public static void insertSort(int[] array){
-        for(int i = 1;i<array.length;i++){
-            for(int j=i;j>0;j--){
-                if(array[j]<array[j-1]){
-                    int temp = array[j];
-                    array[j] = array[j-1];
-                    array[j-1] = temp;
-                }
+public class SelectionSort {
+    public static void selectSort(int[] array){
+
+        for(int i = 0;i<array.length-1;i++){
+            int tempIndex = i;
+            for(int j = i+1;j<array.length;j++){
+                    if(array[j]<array[tempIndex]){
+                        tempIndex = j;
+                    }
             }
-        }
-    }
-
-    // 通过赋值去交换数据
-    public static void insertSortImproved(int[] array){
-        for(int i = 1;i<array.length;i++){
-            int tempValue = array[i];
-            int j;   //j保存元素e应该插入的位置
-            // 提前终止
-            for(j=i;j>0 && tempValue<array[j-1];j--){
-
-                   array[j] = array[j-1];
-
-            }
-            array[j] = tempValue;
+//
+            swap(array,i,tempIndex);
         }
     }
     public static void quickSort(int[] arr) {
         if (arr == null || arr.length < 2) {
             return;
         }
-        insertSortImproved(arr);
+        selectSort(arr);
     }
 
 

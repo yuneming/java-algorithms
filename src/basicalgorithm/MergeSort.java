@@ -2,38 +2,66 @@ package basicalgorithm;
 
 import java.util.Arrays;
 
-public class InsertionSort {
-    public static void insertSort(int[] array){
-        for(int i = 1;i<array.length;i++){
-            for(int j=i;j>0;j--){
-                if(array[j]<array[j-1]){
-                    int temp = array[j];
-                    array[j] = array[j-1];
-                    array[j-1] = temp;
-                }
+public class MergeSort {
+    public static void mergeSort(int[] array,int low,int high){
+            int mid = (low+high)/2;
+            if(low >= high){
+                return;
             }
+            mergeSort(array,low,mid);
+            mergeSort(array,mid+1,high);
+            // 改进：数组有序
+            if(array[mid] > array[mid+1]){
+                merge(array,low,mid,high);
+            }
+
+    }
+    public static void merge(int[] arr, int low, int mid, int high){
+        //temp数组用于暂存合并的结果
+        int[] temp = new int[high - low + 1];
+        //左半边的指针
+        int i = low;
+        //右半边的指针
+        int j = mid+1;
+        //合并后数组的指针
+        int k = 0;
+
+        //将记录由小到大地放进temp数组
+        for(; i <= mid && j <= high; k++)
+        {
+            if(arr[i] < arr[j]){
+                temp[k] = arr[i++];
+            }
+
+            else{
+                temp[k] = arr[j++];
+            }
+
         }
+
+        //接下来两个while循环是为了将剩余的（比另一边多出来的个数）放到temp数组中
+        while(i <= mid){
+            temp[k++] = arr[i++];
+        }
+
+
+        while(j <= high){
+            temp[k++] = arr[j++];
+        }
+
+
+        //将temp数组中的元素写入到待排数组中
+        for(int l = 0; l < temp.length; l++){
+            arr[low + l] = temp[l];
+        }
+
     }
 
-    // 通过赋值去交换数据
-    public static void insertSortImproved(int[] array){
-        for(int i = 1;i<array.length;i++){
-            int tempValue = array[i];
-            int j;   //j保存元素e应该插入的位置
-            // 提前终止
-            for(j=i;j>0 && tempValue<array[j-1];j--){
-
-                   array[j] = array[j-1];
-
-            }
-            array[j] = tempValue;
-        }
-    }
     public static void quickSort(int[] arr) {
         if (arr == null || arr.length < 2) {
             return;
         }
-        insertSortImproved(arr);
+        mergeSort(arr,0,arr.length-1);
     }
 
 
