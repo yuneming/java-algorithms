@@ -17,6 +17,23 @@ public class MaxHeap<Item extends Comparable> {
         count = 0;
         this.capacity = capicity;
     }
+
+    // 构造函数，通过一个给定数组创建一个最大堆
+    // 该构造堆的过程，时间复杂读为O(n)
+    public MaxHeap(Item arr[]){
+        int n = arr.length;
+        data = (Item[]) new Comparable[n+1];
+        capacity = n;
+        for (int i = 0; i < n; i++){
+            data[i+1] = data[i];
+        }
+        count = n;
+        // heapify的过程，取第一个非叶子节点依次向上调整堆
+        for (int  i = count/2; i >= 1; i--){
+            shiftDown(i);
+        }
+    }
+
     // 返回堆中的元素个数
     public int size(){
         return count;
@@ -39,6 +56,36 @@ public class MaxHeap<Item extends Comparable> {
         count ++;
         shiftUp(count);
     }
+
+    //从最大堆中取出堆顶元素，即堆中所存储的最大数据
+    public Item extractMax(){
+        assert count>0;
+        Item ret = data[1];
+        swap(1,count);
+        count--;
+        shiftDown(1);
+        return ret;
+    }
+
+    private void shiftDown(int k) {
+        // 左孩子的下标比总数少
+        while (2*k <= count){
+            // 左孩子的下标
+            int j = 2*k;
+            // 如果有右孩子且比左孩子大，更新j
+            if (j+1 <= count && data[j+1].compareTo(data[j]) > 0){
+                j++;
+            }
+            // 父节点大于左右自子孩子，则结束循环
+            if (data[k].compareTo(data[j]) > 0){
+                break;
+            }
+            swap(k,j);
+            k = j;
+        }
+
+    }
+
     // 交换堆中索引为i和j的两个元素
     private void swap(int i, int j){
         Item t = data[i];
@@ -50,9 +97,22 @@ public class MaxHeap<Item extends Comparable> {
         MaxHeap<Integer> maxHeap = new MaxHeap<Integer>(100);
         int N = 50; // 堆中元素个数
         int M = 100; // 堆中元素取值范围[0, M)
-        for( int i = 0 ; i < N ; i ++ )
-            maxHeap.insert( new Integer((int)(Math.random() * M)) );
+        for( int i = 0 ; i < N ; i ++ ) {
+            maxHeap.insert(new Integer((int) (Math.random() * M)));
+        }
         System.out.println(maxHeap.size());
+        Integer[] arr = new Integer[N];
+        // 讲maxHeap中的数据逐渐使用extraMax取出来
+        // 取出来的顺序应该是按照从大到小的顺序取出来的
+        for (int i = 0; i < N; i++){
+            arr[i] = maxHeap.extractMax();
+            System.out.println(arr[i]+" ");
+        }
+        System.out.println();
+        // 确保arr数组是从大到小排列的
+        for (int  i = 0; i < N; i++){
+            assert arr[i] >= arr[i];
+        }
     }
 
 }
