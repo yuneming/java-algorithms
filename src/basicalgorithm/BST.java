@@ -78,6 +78,49 @@ public class BST<Key extends Comparable<Key>,Value> {
         return search( root , key );
     }
 
+    // 二分搜索树的前序遍历
+    public void preOrder(){
+        preOrder(root);
+    }
+
+    // 二分搜索树的中序遍历
+    public void inOrder(){
+        inOrder(root);
+    }
+
+    // 二分搜索树的后序遍历
+    public void postOrder(){
+        postOrder(root);
+    }
+
+    //对以node为根的二叉搜索树进行前序遍历, 递归算法
+    private void preOrder(Node node){
+        if (node != null){
+            System.out.println(node.key);
+            preOrder(node.left);
+            preOrder(node.right);
+        }
+    }
+
+    // 对以node为根的二叉搜索树进行中序遍历, 递归算法
+    private void inOrder(Node node){
+
+        if( node != null ){
+            inOrder(node.left);
+            System.out.println(node.key);
+            inOrder(node.right);
+        }
+    }
+
+    // 对以node为根的二叉搜索树进行后序遍历, 递归算法
+    private void postOrder(Node node) {
+
+        if (node != null) {
+            postOrder(node.left);
+            postOrder(node.right);
+            System.out.println(node.key);
+        }
+    }
 
     // 向以node为根的二分搜索树中, 插入节点(key, value), 使用递归算法
     // 返回插入新节点后的二分搜索树的根
