@@ -171,6 +171,70 @@ public class BST<Key extends Comparable<Key>,Value> {
         }
     }
 
+    // 在以node为根的二叉搜索树中，寻找key的floor值所处的节点，递归算法
+    private Node floor(Node node, Key key){
+        if (node == null){
+            return null;
+        }
+        // 如果node的key值和要寻找的key值相等
+        // 则node本身就是key的floor节点
+        if( node.key.compareTo(key) == 0 )
+            return node;
+        // 如果node的key值比要寻找的key值大
+        // 则要寻找的key的floor节点一定在node的左子树中
+        if( node.key.compareTo(key) > 0 )
+            return floor( node.left , key );
+
+        // 如果node->key < key
+        // 则node有可能是key的floor节点, 也有可能不是(存在比node->key大但是小于key的其余节点)
+        // 需要尝试向node的右子树寻找一下
+        Node tempNode = floor( node.right , key );
+        if( tempNode != null )
+            return tempNode;
+
+        return node;
+    }
+
+
+    // 查找key的前驱
+    // 如果不存在key的前驱(key不存在，或者key是整棵二叉树中的最小值), 则返回NULL
+    public Key predecessor(Key key){
+        Node node = search(root,key);
+        //如果key所在节点不存在，则key没有前驱，返回null
+        if (node == null){
+            return null;
+        }
+        // 如果key所在的节点左子树不为空,则其左子树的最大值为key的前驱
+        if(node.left != null)
+            return maximum(node.left).key;
+        // 否则, key的前驱在从根节点到key的路径上, 在这个路径上寻找到比key小的最大值, 即为key的前驱
+        Node preNode = predecessorFromAncestor(root, key);
+        return preNode == null ? null:preNode.key;
+    }
+
+    // 在以node为根的二叉搜索树中, 寻找key的祖先中,比key小的最大值所在节点, 递归算法
+    // 算法调用前已保证key存在在以node为根的二叉树中
+    Node predecessorFromAncestor(Node node, Key key){
+        if (node.key.compareTo(key) == 0){
+            return null;
+        }
+        if (key.compareTo(node.key) > 0){
+            // 如果当前节点大于key, 则当前节点不可能是比key小的最大值
+            // 向下搜索到的结果直接返回
+            return predecessorFromAncestor(node.left, key);
+        }
+        else {
+            assert key.compareTo(node.key) > 0;
+            // 如果当前节点小于key, 则当前节点有可能是比key小的最大值
+            // 向右继续搜索, 将结果存储到tempNode中
+            Node tempNode = predecessorFromAncestor(node.right, key);
+            if(tempNode != null)
+                return tempNode;
+            else
+                // 如果tempNode为空, 则当前节点即为结果
+                return node;
+        }
+    }
 
     // 查看以node为根的二分搜索树中是否包含键值为key的节点, 使用递归算法
     private boolean contain(Node node, Key key){
@@ -188,21 +252,36 @@ public class BST<Key extends Comparable<Key>,Value> {
 
     // 在以node为根的二分搜索树中查找key所对应的value, 递归算法
     // 若value不存在, 则返回NULL
-    private Value search(Node node, Key key){
+//    private Value search(Node node, Key key){
+//
+//        if( node == null )
+//            return null;
+//
+//        if( key.compareTo(node.key) == 0 )
+//            return node.value;
+//        else if( key.compareTo(node.key) < 0 )
+//            return search( node.left , key );
+//        else // key > node->key
+//            return search( node.right, key );
+//    }
+
+    private Node search(Node node, Key key){
 
         if( node == null )
             return null;
 
         if( key.compareTo(node.key) == 0 )
-            return node.value;
+            return node;
         else if( key.compareTo(node.key) < 0 )
             return search( node.left , key );
         else // key > node->key
             return search( node.right, key );
     }
+
     // 在二分搜索树中搜索键key所对应的值。如果这个值不存在, 则返回null
     public Value search(Key key){
-        return search( root , key );
+        Node node = search(root,key);
+        return node == null ? null:node.value;
     }
 
     // 二分搜索树的前序遍历
