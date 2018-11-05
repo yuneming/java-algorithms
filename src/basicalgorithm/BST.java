@@ -1,5 +1,8 @@
 package basicalgorithm;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * 二分搜索树
  * 由于key需要能够进行比较，所以需要extends Com
@@ -45,6 +48,68 @@ public class BST<Key extends Comparable<Key>,Value> {
     public boolean contain(Key key){
         return contain(root, key);
     }
+
+    // 寻找二分搜索树的最小的键值
+    public Key minimum(){
+        assert count!=0;
+        Node minNode = minimum(root);
+        return minNode.key;
+    }
+
+    // 返回以node为根的二分搜索树的最小键值所在的节点
+    private Node minimum(Node node){
+        if( node.left == null )
+            return node;
+
+        return minimum(node.left);
+    }
+
+    // 从二分搜索树中删除最小值所在节点
+    public void removeMin(){
+        if (root != null){
+            root = removeMin(root);
+        }
+    }
+
+    // 返回以node为根的二分搜索树的最大键值所在的节点
+    private Node maximum(Node node){
+        if( node.right == null )
+            return node;
+
+        return maximum(node.right);
+    }
+
+    // 删除掉以node为根的二分搜索树中的最大节点
+    // 返回删除节点后新的二分搜索树的根
+    private Node removeMax(Node node){
+
+        if( node.right == null ){
+
+            Node leftNode = node.left;
+            node.left = null;
+            count --;
+            return leftNode;
+        }
+
+        node.right = removeMax(node.right);
+        return node;
+    }
+
+    // 删除掉以node为跟的二分搜索树中的最小节点
+    // 返回删除节点后新的二分搜索树的跟
+    private Node removeMin(Node node){
+        if (node.left == null){
+            Node rightNode = node.right;
+            node.right = null;
+            count--;
+            return rightNode;
+        }
+        node.left = removeMin(node.left);
+        return node;
+    }
+
+
+
     // 查看以node为根的二分搜索树中是否包含键值为key的节点, 使用递归算法
     private boolean contain(Node node, Key key){
 
@@ -99,6 +164,25 @@ public class BST<Key extends Comparable<Key>,Value> {
             System.out.println(node.key);
             preOrder(node.left);
             preOrder(node.right);
+        }
+    }
+
+    // 二分搜索树的层序遍历
+    public void levelOrder(){
+
+        // 我们使用LinkedList来作为我们的队列
+        Queue<Node> q = new LinkedList<Node>();
+        q.add(root);
+        while( !q.isEmpty() ){
+
+            Node node = q.remove();
+
+            System.out.println(node.key);
+
+            if( node.left != null )
+                q.add( node.left );
+            if( node.right != null )
+                q.add( node.right );
         }
     }
 
