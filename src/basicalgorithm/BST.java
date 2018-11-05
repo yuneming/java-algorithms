@@ -18,6 +18,12 @@ public class BST<Key extends Comparable<Key>,Value> {
             this.value = value;
             left = right = null;
         }
+        public Node(Node node){
+            this.key = node.key;
+            this.value = node.value;
+            this.left = node.left;
+            this.right = node.right;
+        }
     }
     // 根节点
     private Node root;
@@ -108,6 +114,62 @@ public class BST<Key extends Comparable<Key>,Value> {
         return node;
     }
 
+    // 从二分搜素树中删除最大值所在节点
+    public void remove(Key key){
+        root = remove(root,key);
+    }
+
+    // 删除掉以node为根的二分搜索树中键值为key的节点，递归算法
+    // 返回删除节点后新的二分搜索树的根
+    Node remove(Node node,Key key){
+        if (node == null){
+            return null;
+        }
+        // 在左子树中去寻找
+        if (key.compareTo(node.key) < 0){
+            node.left = remove(node.left,key);
+            return node;
+        }
+        // 在右子树中去寻找
+        else if (key.compareTo(node.key) > 0){
+            node.right = remove(node.right,key);
+            return node;
+        }
+        // key == node.key
+        else {
+            // 待删除节点左子树为空的情况
+            if (node.left == null){
+                Node rightNode = node.right;
+                node.right = null;
+                count--;
+                return rightNode;
+            }
+            // 待删除节点右子树为空的情况
+            if (node.right == null){
+                Node leftNode = node.left;
+                node.left = null;
+                count--;
+                return leftNode;
+            }
+            // 待删除节点左右子树均不为空的情况
+
+            // 找到比待删除节点大的最小节点, 即待删除节点右子树的最小节点
+            // 用这个节点顶替待删除节点的位置
+
+            // 将最小节点复制了一份
+            Node successor =  new Node(minimum(node.right));
+            count++;
+            // 删除了最小值的右孩子
+            successor.right = removeMin(node.right);
+            successor.left = node.left;
+
+            node.left = node.right = null;
+            count --;
+
+            return successor;
+
+        }
+    }
 
 
     // 查看以node为根的二分搜索树中是否包含键值为key的节点, 使用递归算法
