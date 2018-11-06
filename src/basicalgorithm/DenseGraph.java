@@ -1,7 +1,9 @@
 package basicalgorithm;
 
+import java.util.Vector;
+
 /**
- * 用于稠密图的邻接矩阵
+ * 用于稠密图的邻接矩阵，不存在平行边的情况
  */
 public class DenseGraph {
     //节点数
@@ -55,6 +57,19 @@ public class DenseGraph {
         assert v >= 0 && v < n ;
         assert w >= 0 && w < n ;
         return g[v][w];
+    }
+
+    // 返回图中一个顶点的所有邻边
+    // 由于java使用引用机制，返回一个vector不会带来额外开销
+    public Iterable<Integer> adj(int v){
+        assert v >=0 && v < n;
+        Vector<Integer> adjV = new Vector<Integer>();
+        for (int i = 0; i < n; i++){
+            if (g[v][i]){
+                adjV.add(i);
+            }
+        }
+        return adjV;
     }
 
 }

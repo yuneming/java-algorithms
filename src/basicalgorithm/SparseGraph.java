@@ -3,7 +3,7 @@ package basicalgorithm;
 import java.util.Vector;
 
 /**
- * 用于稀疏图的邻接表
+ * 用于稀疏图的邻接表,存在平行边的情况
  */
 public class SparseGraph {
     // 节点数
@@ -36,8 +36,9 @@ public class SparseGraph {
     public void addEdge(int v, int w){
         assert v >= 0 && v < n ;
         assert w >= 0 && w < n ;
+        // 没有考虑自环边(v==w)
         g[v].add(w);
-        // 考虑是有向图且不是自环边(v==w)
+        // 考虑是无向图且不是自环边
         if( v != w && !directed )
             g[w].add(v);
 
@@ -54,5 +55,12 @@ public class SparseGraph {
             if( g[v].elementAt(i) == w )
                 return true;
         return false;
+    }
+
+    // 返回图中一个顶点的所有邻边
+    // 由于java使用引用机制，返回一个Vector不会带来额外开销
+    public Iterable<Integer> adj(int v){
+        assert v >=0 && v < n;
+        return g[v];
     }
 }
