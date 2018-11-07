@@ -54,7 +54,7 @@ public class ReadGraph {
                 scanner.useLocale(Locale.ENGLISH);
             }
             else
-                throw new IllegalArgumentException(filename + "doesn't exist.");
+                throw new IllegalArgumentException(filename + " doesn't exist.");
         }
         catch (IOException ioe) {
             throw new IllegalArgumentException("Could not open " + filename, ioe);
